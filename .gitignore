@@ -1,0 +1,21 @@
+# Build artifacts
+build/
+bin/
+*.o
+*.a
+*.so
+*.dylib
+*.out
+
+# IDE and OS
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+compile_commands.json
+
+# Arduino / PlatformIO
+.pio/
+.pioenvs/
+.piolibdeps/
