@@ -121,6 +121,23 @@ void loop() {
         }
     }
 
+    // 6. Periodic Heartbeat announcement to Central Hub (every 1.5 seconds)
+    static unsigned long lastHbTime = 0;
+    if (millis() - lastHbTime >= 1500) {
+        lastHbTime = millis();
+        CinemaKnot::KnotPacket hb;
+        hb.type = CinemaKnot::KnotPacket::TYPE_HEARTBEAT;
+        hb.sourceNodeId = NODE_ID;
+        hb.targetNodeId = CinemaKnot::KnotPacket::ROLE_TURNTABLE;
+        hb.matchedId = millis() / 1000; // Uptime seconds
+        hb.setLabel("Turntable ESP32");
+        hb.sequence = packetSequence++;
+
+        udp.beginPacket(IPAddress(255, 255, 255, 255), IOT_PORT);
+        udp.write(reinterpret_cast<const uint8_t*>(&hb), sizeof(hb));
+        udp.endPacket();
+    }
+
     // Micro-delay for sample timing pacing
     delayMicroseconds(120);
 }

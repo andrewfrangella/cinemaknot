@@ -63,25 +63,40 @@ All devices communicate over an isolated local network (e.g., an ad-hoc Wi-Fi ac
 * [`include/CinemaKnot/Corpus.hpp`](include/CinemaKnot/Corpus.hpp): Associative database engine with 1-NN lookup, aleatoric cluster sampling ("knotting"), and binary serialization.
 * [`include/CinemaKnot/NetworkProtocol.hpp`](include/CinemaKnot/NetworkProtocol.hpp): Compact binary protocol (`KnotPacket`) for microcontrollers and Linux.
 * [`include/CinemaKnot/UdpSocket.hpp`](include/CinemaKnot/UdpSocket.hpp): Zero-dependency POSIX UDP socket implementation.
+* [`hub/server.py`](hub/server.py): **Central Nervous System Hub** (Async Python/WebSockets daemon bridging UDP IoT to web UI).
+* [`hub/static/`](hub/static/): Interactive web dashboard (neural topology graph, live patch bay, VU meters).
 * [`examples/pi_cinema_node.cpp`](examples/pi_cinema_node.cpp): Standalone Pi appliance driving real-time queries against a 32×25 raster database.
 * [`examples/esp32_tactile_node.ino`](examples/esp32_tactile_node.ino): ESP32 Arduino/ESP-IDF sketch for contact mics, turntables, and cassette players.
+* [`examples/simulate_nodes.py`](examples/simulate_nodes.py): Multi-node hardware emulator for testing without physical sensors connected.
 
 ---
 
 ## 5. Building & Running
 
-### On macOS / Raspberry Pi OS:
+### Central Nervous System Hub (macOS or Raspberry Pi):
+```bash
+cd Developer/cinemaknot
+python3 hub/server.py
+```
+Open **`http://127.0.0.1:8880`** in your browser. All discovered ESP32 and Pi nodes appear automatically with live VU telemetry, interactive dragging, and pluggable patch cables.
+
+To test the Hub without hardware attached, launch the multi-node simulator in a separate terminal:
+```bash
+python3 examples/simulate_nodes.py
+```
+
+### C++ Core Engine (macOS / Raspberry Pi):
 ```bash
 cd Developer/cinemaknot
 mkdir -p build && cd build
 cmake ..
-make
+make -j4
 ./knot_test        # Runs verification unit tests
 ./pi_cinema_node   # Starts the appliance on port 8888
 ```
 
-### On ESP32:
-1. Open [`examples/esp32_tactile_node.ino`](file:///Users/andrewfrangella/Developer/cinemaknot/examples/esp32_tactile_node.ino) in Arduino IDE or PlatformIO.
-2. Ensure the `include/CinemaKnot` headers are placed in your Arduino libraries folder or local project directory.
-3. Set your local offline SSID and password (no internet needed).
-4. Flash to ESP32 (NodeMCU / ESP32-WROOM-32).
+### ESP32 Microcontrollers:
+1. Open [`examples/esp32_tactile_node.ino`](examples/esp32_tactile_node.ino) in Arduino IDE or PlatformIO.
+2. Ensure the `include/CinemaKnot` headers are placed in your Arduino search path.
+3. Select your ESP32 board, set your offline SSID/password, and flash over USB.
+4. Open the Serial Monitor at 115200 baud. The node will automatically announce itself to the Hub via `TYPE_HEARTBEAT`.

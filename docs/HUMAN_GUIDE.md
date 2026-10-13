@@ -108,7 +108,40 @@ make -j4
 ```
 
 ### On ESP32:
-1. Open [`examples/esp32_tactile_node.ino`](file:///Users/andrewfrangella/Developer/cinemaknot/examples/esp32_tactile_node.ino) in Arduino IDE or PlatformIO.
+1. Open [`examples/esp32_tactile_node.ino`](examples/esp32_tactile_node.ino) in Arduino IDE or PlatformIO.
 2. Ensure the `include/CinemaKnot` folder is in your include search path.
 3. Select your ESP32 board and flash over USB.
 4. Open the Serial Monitor at 115200 baud to view real-time network telemetry.
+
+---
+
+## 6. The Central Nervous System Hub (Visual Patch Bay)
+
+Instead of having nodes communicate blindly, the **Central Nervous System Hub** acts as a visual patch bay and central nervous system for your studio or classroom. It runs natively on your MacBook today, and can be moved to a Raspberry Pi with zero changes.
+
+### Starting the Hub:
+```bash
+cd Developer/cinemaknot
+python3 hub/server.py
+```
+Open **`http://127.0.0.1:8880`** in any browser on the local network.
+
+### What You Can Do in the Hub:
+1. **Automatic Device Discovery:**
+   * When any ESP32 or Raspberry Pi boots up, it transmits a periodic `TYPE_HEARTBEAT` packet.
+   * Nodes automatically materialize on the visual canvas as modular hardware cards with their name, role, IP, and uptime.
+2. **Real-Time Telemetry & VU Meters:**
+   * Each card features live VU meters showing real-time **RMS Loudness**, **Spectral Centroid**, and **Spectral Flatness**.
+   * Activity pulses flash in green whenever packets or transient onsets are detected.
+3. **Interactive Patch Bay (Routing Matrix):**
+   * Click **"+ Connect New Route"** to dynamically patch any source channel (e.g. Turntable Centroid) to any destination parameter (e.g. Mechanical TV Framing Phase or Motor PWM).
+   * Luminous Bezier cables connect the devices with animated energy pulses flowing along the wires.
+   * Click **"Unplug"** at any time to break or reconfigure the signal flow without restarting any devices.
+4. **Node Inspector & Calibration:**
+   * Click any node card on the canvas to inspect its raw data, send test onset pulses, or manually rotate the mechanical TV phase.
+5. **Offline Simulation Mode:**
+   * To test the Hub without hardware connected, run the emulator:
+     ```bash
+     python3 examples/simulate_nodes.py
+     ```
+

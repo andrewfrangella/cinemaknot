@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CinemaKnot // Central Nervous System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-left">
+      <div class="logo-badge">CINEMAKNOT</div>
+      <h1 class="header-title">Central Nervous System Hub</h1>
+      <span class="offline-pill">● AIR-GAPPED LOCAL IoT</span>
+    </div>
+    <div class="header-right">
+      <div class="metric-chip">
+        <span class="metric-label">NODES</span>
+        <span class="metric-val" id="nodeCount">0</span>
+      </div>
+      <div class="metric-chip">
+        <span class="metric-label">ROUTES</span>
+        <span class="metric-val" id="routeCount">0</span>
+      </div>
+      <div class="metric-chip">
+        <span class="metric-label">PACKETS</span>
+        <span class="metric-val" id="packetCount">0</span>
+      </div>
+      <div class="metric-chip status-chip" id="hubStatusChip">
+        <span class="status-dot"></span>
+        <span id="hubStatusText">CONNECTING</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="dashboard-grid">
+    <!-- Visual Topology & Patch Bay Section -->
+    <section class="card graph-card">
+      <div class="card-header">
+        <div class="header-tag">
+          <h2>NEURAL TOPOLOGY & PATCH MATRIX</h2>
+          <span class="subtitle">Live device connections, sensor telemetry, and associative routing</span>
+        </div>
+        <div class="card-actions">
+          <button class="btn btn-secondary" id="btnAutoArrange">Auto-Arrange</button>
+          <button class="btn btn-primary" id="btnOpenPatchModal">+ Connect New Route</button>
+        </div>
+      </div>
+
+      <div class="canvas-container" id="canvasContainer">
+        <canvas id="patchCanvas"></canvas>
+        <div id="nodesOverlay" class="nodes-overlay"></div>
+      </div>
+    </section>
+
+    <!-- Sidebar: Routing Bay & Node Inspector -->
+    <aside class="sidebar-column">
+      <!-- Routing Bay Card -->
+      <section class="card patchbay-card">
+        <div class="card-header">
+          <h3>ACTIVE PATCH BAY ROUTES</h3>
+        </div>
+        <div class="patchbay-list" id="patchbayList">
+          <div class="empty-state">No active routes. Click "+ Connect New Route" above.</div>
+        </div>
+      </section>
+
+      <!-- Node Inspector Card -->
+      <section class="card inspector-card">
+        <div class="card-header">
+          <h3>NODE INSPECTOR & TELEMETRY</h3>
+        </div>
+        <div id="inspectorContent" class="inspector-body">
+          <div class="empty-state">Select a node on the canvas to inspect telemetry and remote controls.</div>
+        </div>
+      </section>
+    </aside>
+  </main>
+
+  <!-- Route Creator Modal -->
+  <div class="modal-backdrop" id="patchModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>Patch New Signal Route</h3>
+        <button class="btn-close" id="btnClosePatchModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Source Node (Signal Origin):</label>
+          <select id="modalSrcNode" class="select-control"></select>
+        </div>
+        <div class="form-group">
+          <label>Source Channel / Output Descriptor:</label>
+          <select id="modalSrcParam" class="select-control">
+            <option value="centroid">Spectral Centroid (Timbre / Brightness)</option>
+            <option value="rms">RMS Energy (Loudness / Vibration)</option>
+            <option value="flatness">Spectral Flatness (Noisiness / Texture)</option>
+            <option value="zcr">Zero-Crossing Rate (Pitch / Friction)</option>
+            <option value="onset">Transient Onset (Needle Drop / Splice Click)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Destination Node (Target Appliance):</label>
+          <select id="modalDstNode" class="select-control"></select>
+        </div>
+        <div class="form-group">
+          <label>Destination Parameter / Modulation:</label>
+          <select id="modalDstParam" class="select-control">
+            <option value="phase">Optical Framing Phase ($0^\circ - 359^\circ$)</option>
+            <option value="motor_pwm">Motor Speed / PWM Profile</option>
+            <option value="frame_index">Corpus Frame Lookup / Resequencing</option>
+            <option value="led_strobe">LED Pulse Strobe / Optical Flash</option>
+            <option value="contrast">Optical Contrast / Gamma Curve</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btnCancelPatch">Cancel</button>
+        <button class="btn btn-primary" id="btnSavePatch">Plug Patch Cable</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

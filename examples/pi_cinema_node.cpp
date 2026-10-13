@@ -108,6 +108,25 @@ int main() {
             }
         }
 
+        // Periodic heartbeat broadcast to announce to Central Hub (every 1.5 seconds)
+        static auto lastHeartbeat = std::chrono::steady_clock::now();
+        static auto startTime = std::chrono::steady_clock::now();
+        auto now = std::chrono::steady_clock::now();
+        if (std::chrono::duration_cast<std::chrono::milliseconds>(now - lastHeartbeat).count() >= 1500) {
+            lastHeartbeat = now;
+            uint32_t uptime = static_cast<uint32_t>(std::chrono::duration_cast<std::chrono::seconds>(now - startTime).count());
+            
+            CinemaKnot::KnotPacket hb;
+            hb.type = CinemaKnot::KnotPacket::TYPE_HEARTBEAT;
+            hb.sourceNodeId = 10; // Pi Master Node ID
+            hb.targetNodeId = CinemaKnot::KnotPacket::ROLE_MECHANICAL_TV;
+            hb.matchedId = uptime;
+            hb.distance = currentPhaseOffsetDeg;
+            hb.setLabel("Nipkow TV (Pi 4)");
+            hb.sequence = packetSeq++;
+            socket.broadcastPacket(hb, IOT_PORT);
+        }
+
         // Sleep 1ms to prevent CPU burn in the polling loop
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }

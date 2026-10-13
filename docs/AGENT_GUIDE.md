@@ -52,6 +52,9 @@ Total: 49 bytes
 * `0x03` (`TYPE_ONSET`): Sent immediately upon transient edge detection (needle drop, tape splice, contact hit).
 * `0x04` (`TYPE_TELEMETRY`): Continuous hardware state (motor RPM, fader position, opto-sensor jitter).
 * `0x05` (`TYPE_SYNC`): Master phase clock synchronization pulse.
+* `0x06` (`TYPE_HEARTBEAT`): Periodic discovery announcement emitted by all nodes every 1.5s (carries role, uptime, and 32-byte label).
+* `0x07` (`TYPE_ROUTE_CONFIG`): Dynamic routing configuration sent by the Central Hub to patch signal connections.
+* `0x08` (`TYPE_CONTROL`): Remote calibration or manual parameter override sent from the Central Hub.
 
 ---
 
